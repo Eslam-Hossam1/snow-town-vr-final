@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro; // Include TextMeshPro namespace
+using UnityEngine.XR.Interaction.Toolkit;
+
 
 public class Person : MonoBehaviour
 {
@@ -12,13 +14,14 @@ public class Person : MonoBehaviour
     {
         if (other.CompareTag("Gift")) // Ensure the object has the "Gift" tag
         {
-            other.gameObject.SetActive(false); // Deactivate the gift
+            // Disable XR Grab Interaction for the gift
+            DisableGrabInteraction(other.gameObject);
 
-            // Find the Text (TMP) component in the hierarchy
-            GameObject canvas = GameObject.Find("Canvas"); // Find the Canvas by name
-            //Transform canvasTransform = transform.Find("Canvas");
+            // Find the Canvas by name
+            GameObject canvas = GameObject.Find("Canvas");
             if (canvas != null)
             {
+                // Update the progress bar
                 Transform progressBarTransform = canvas.transform.GetChild(0).GetChild(2); // Adjust based on the exact hierarchy
                 Image progressBar = progressBarTransform.GetComponent<Image>();
 
@@ -30,26 +33,16 @@ public class Person : MonoBehaviour
                 {
                     Debug.LogWarning("ProgressBar Image component not found!");
                 }
-            }
-            else
-            {
-                Debug.LogWarning("Canvas not found!");
-            }
 
-            Debug.Log("Gift Collected!");
-        
-        if (canvas != null)
-            {
-
-                // Navigate through the hierarchy to find the Text (TMP)
-                Transform panel = canvas.transform.GetChild(0); // Assuming the panel is the 10th child of Canvas
+                // Update the gift count text
+                Transform panel = canvas.transform.GetChild(0); // Assuming the panel is the first child of Canvas
                 TextMeshProUGUI textTMP = panel.GetChild(panel.childCount - 1).GetComponent<TextMeshProUGUI>(); // Last child of the panel
 
                 if (textTMP != null)
                 {
                     // Increase gift count and update the text
                     giftCount++;
-                    textTMP.text ="10/"+ giftCount.ToString(); // Update the TMP text to display the new count
+                    textTMP.text = "10/" + giftCount.ToString(); // Update the TMP text to display the new count
                 }
                 else
                 {
@@ -62,6 +55,20 @@ public class Person : MonoBehaviour
             }
 
             Debug.Log("Gift Collected!");
+        }
+    }
+
+    private void DisableGrabInteraction(GameObject gift)
+    {
+        // Disable the XR Grab Interaction component
+        var grabInteraction = gift.GetComponent<XRGrabInteractable>();
+        if (grabInteraction != null)
+        {
+            grabInteraction.enabled = false; // Disables the grab interaction
+        }
+        else
+        {
+            Debug.LogWarning("XR Grab Interaction component not found on the gift!");
         }
     }
 }
