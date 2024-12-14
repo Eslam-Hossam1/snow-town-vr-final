@@ -6,11 +6,10 @@ using TMPro; // Include TextMeshPro namespace
 using UnityEngine.XR.Interaction.Toolkit;
 
 
-public class Person : MonoBehaviour
+public class BoxScoreHandler : MonoBehaviour
 {
     public static int giftCount = 0; // Keeps track of collected gifts
     private AudioSource audioSource;
-   // private Person personScript; //
     private Collider boxCollider; // Reference to the box collider
 
     void Start()
@@ -18,7 +17,6 @@ public class Person : MonoBehaviour
         // Get the AudioSource component attached to this GameObject
         audioSource = GetComponent<AudioSource>();
 
-       // personScript = GetComponent<Person>();
         boxCollider = GetComponent<Collider>();
     }
     private void OnTriggerEnter(Collider other)
@@ -65,15 +63,10 @@ public class Person : MonoBehaviour
                 if (textTMP != null)
                 {
                     // Increase gift count and update the text
-                    Debug.Log("1 before increment, gift count = " + giftCount.ToString());
                     giftCount++;
-                    Debug.Log("2 before concatination , gift count = " + giftCount.ToString());
-                    //if (giftCount > 10)
-                    //{
-                    //    giftCount = 10;
-                    //}
+                    
                     textTMP.text = "10/" + giftCount.ToString(); // Update the TMP text to display the new count
-                    Debug.Log(" result text =" + textTMP.text);
+                 
                 }
                 else
                 {
@@ -88,7 +81,6 @@ public class Person : MonoBehaviour
             Debug.Log("Gift Collected!");
         }
 
-        //personScript.enabled = false; // Disable the script
     }
 
     private void DisableGrabInteraction(GameObject gift)
